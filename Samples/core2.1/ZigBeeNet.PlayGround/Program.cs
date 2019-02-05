@@ -80,6 +80,8 @@ namespace ZigBeeNet.PlayGround
                         if (ushort.TryParse(nwkAddr, out ushort addr))
                         {
                             var node = networkManager.GetNode(addr);
+                            var nodeEndpoint = new ZigBeeEndpoint(node, 1);
+                            node.AddEndpoint(nodeEndpoint);
 
                             if (node != null)
                             {
@@ -87,7 +89,16 @@ namespace ZigBeeNet.PlayGround
 
                                 try
                                 {
-                                    if (cmd == "toggle")
+                                    if(cmd == "info")
+                                    {
+                                        //var basicCluster = new ZclBasicCluster(coord.GetEndpoint(0), networkManager);
+                                        //Console.WriteLine(basicCluster.GetManufacturerName(0));
+
+                                        var basicLightCluster = new ZclBasicCluster(new ZigBeeEndpoint(coord, 1), networkManager);
+                                        //var basicLightCluster = new ZclBasicCluster(node.GetEndpoint(1), networkManager);
+                                        Console.WriteLine(basicLightCluster.GetManufacturerName(0));
+                                    }
+                                    else if (cmd == "toggle")
                                     {
                                         networkManager.Send(endpointAddress, new ToggleCommand()).GetAwaiter().GetResult();
                                     }

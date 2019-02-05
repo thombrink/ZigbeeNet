@@ -168,13 +168,20 @@ namespace ZigBeeNet.Serialization
                     value[0] = arrayX8;
                     break;
                 case DataType.N_X_ATTRIBUTE_IDENTIFIER:
-                    int cntX16 = (payload.Length - index) / 2;
-                    List<byte> arrayX16 = new List<byte>(cntX16);
-                    for (int arrayIndex = 0; arrayIndex < cntX16; arrayIndex++)
-                    {
-                        arrayX16.Add((byte)(payload[index++]));
+                    value = new object[131];
+
+                    foreach (var pvalue in payload) {
+                        value[index++] = pvalue & 0xFF;
+                        value[index++] = (pvalue >> 8) & 0xFF;
                     }
-                    value[0] = arrayX16;
+
+                    //int cntX16 = (payload.Length - index) / 2;
+                    //List<byte> arrayX16 = new List<byte>(cntX16);
+                    //for (int arrayIndex = 0; arrayIndex < cntX16; arrayIndex++)
+                    //{
+                    //    arrayX16.Add((byte)(payload[index++]));
+                    //}
+                    //value[0] = arrayX16;
                     break;
                 case DataType.UNSIGNED_8_BIT_INTEGER_ARRAY:
                     int cnt8Array = payload.Length - index;
